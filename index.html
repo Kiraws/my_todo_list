@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de taches</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <!-- Partie des bulles d'animations -->
+    <div class="container">
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="bubble">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div class="mybody">
+        <!-- Barre de navigation -->
+        <div class="navbar">
+            <ul>
+                <li style="float:left">
+                    <img  class="l1"src="img/my_logo.png" alt="my_logo" title="Logo" >
+                </li>
+                <li style="float:right">
+                    <a href="https://github.com/Kiraws">
+                        <img class="l2" src="img/github.png" alt="github" title="Visitez mon github">
+                    </a>
+                </li>
+                <li style="float:right">
+                    <div class="toggle-switch">
+                        <label class="switch-label">
+                            <input type="checkbox" class="checkbox" id="toggleSwitch" oninput="Light_Dark()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- Partie de l'application web -->
+        <div class="wrapper">
+            <div class="gestionnaire">
+                <div class="title">Gestionnaire de taches</div>
+                <!-- Partie de l'input -->
+                <div class="barre">
+                    <input type="text" name="task" placeholder="Donner un titre à la tache">
+                    <button id="mainbtn" type="button" onclick="add()" title="Ajouter une tache">Ajouter</button>
+                </div>
+                <div class="search" title="rechercher une tache" >
+                    <label for="search">Search</label>
+                    <input required="" type="search" class="input" id="search" oninput="filterTasks()">
+                    <span class="caret"></span>
+                </div>
+                <!-- Partie de la mini barre de navigation interne -->
+                <nav>
+                    <a id="content1" href="#" onclick="showalltask()" title="Voir les taches en cours" >Mes Taches</a>
+                    <a id="content2" href="#" onclick="showchecktask()" title="Voir les taches terminées" >Terminées</a>
+                    <div class="animation start-home"></div>
+                </nav>
+                <!-- Partie des taches entrées -->
+                <div id="Mes_taches">
+                    <!-- Liste des taches -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

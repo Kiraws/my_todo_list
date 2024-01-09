@@ -1,0 +1,245 @@
+document.addEventListener("DOMContentLoaded", function () {
+  var storedTasks = localStorage.getItem('tasks');
+  var storedDescriptions = localStorage.getItem('descriptions');
+  var taskInput = document.querySelector('input[name="task"]');
+
+
+  if (storedTasks && storedDescriptions) {
+    var taskList = document.getElementById('Mes_taches');
+    var tasksArray = JSON.parse(storedTasks);
+    var descriptionsArray = JSON.parse(storedDescriptions);
+
+    tasksArray.forEach(function (text, index) {
+      var description = descriptionsArray[index];
+      addTask(taskList, text, description);
+    });
+  }
+  loadTaskStates();
+});
+
+function LDmode() {
+  var toggleSwitch = document.getElementById('toggleSwitch');
+  var body = document.body;
+
+  if (toggleSwitch.checked) {
+    // Mode sombre : changer la couleur de fond en jaune
+    body.style.backgroundColor = 'var(--color1)';
+  } else {
+    // Mode normal : revenir à la couleur de fond par défaut
+    body.style.backgroundColor = ''; // Ceci réinitialise à la valeur par défaut définie dans le CSS
+  }
+}
+
+
+
+function addTask(taskList, text, description) {
+  var newTask = document.createElement('div');
+  newTask.className = "elements";
+
+  newTask.innerHTML = `
+    <div class="t1">
+      <input type="text" id="first" value="Titre : ${text} "  disabled>
+      <button id="btn1" onclick="check(this)">
+        <span class="button_top"><img src="verifie.png" alt="check"></span>
+      </button>
+    </div>
+    <div class="t2">
+      <input type="text" id="second" value="${description}" disabled>
+      <button id="btn2" onclick="deleteTask(this)">
+        <span class="button_top"><img src="poubelle.png" alt="delete"></span>
+      </button>
+    </div>
+  `;
+
+  taskList.appendChild(newTask);
+}
+
+function add() {
+  var taskInput = document.querySelector('input[name="task"]');
+  var taskList = document.getElementById('Mes_taches');
+
+  if (taskInput.placeholder == "Donner un titre à la tache") {
+
+    if (taskInput.value.trim() === "") {
+      alert("Veuillez entrer une valeur dans l'input.");
+      return;
+    }
+    else{
+    taskInput.placeholder = "Ajouter une description";
+
+    }
+
+    addTask(taskList, taskInput.value, "");
+
+    var storedTasks = localStorage.getItem('tasks');
+    var storedDescriptions = localStorage.getItem('descriptions');
+    var tasksArray = storedTasks ? JSON.parse(storedTasks) : [];
+    var descriptionsArray = storedDescriptions ? JSON.parse(storedDescriptions) : [];
+
+    tasksArray.push(taskInput.value);
+    descriptionsArray.push("");
+
+    localStorage.setItem('tasks', JSON.stringify(tasksArray));
+    localStorage.setItem('descriptions', JSON.stringify(descriptionsArray));
+
+    taskInput.value = '';
+  } else if (taskInput.placeholder == "Ajouter une description") {
+    if (taskInput.value.trim() === "") {
+      alert("Veuillez entrer une valeur dans l'input.");
+      return;
+    }
+
+    var currentTask = taskList.lastChild;
+    var secondInput = currentTask.querySelector('#second');
+    var index = Array.from(taskList.children).indexOf(currentTask);
+
+    secondInput.value = taskInput.value;
+
+    var storedDescriptions = localStorage.getItem('descriptions');
+    var descriptionsArray = storedDescriptions ? JSON.parse(storedDescriptions) : [];
+    descriptionsArray[index] = taskInput.value;
+    localStorage.setItem('descriptions', JSON.stringify(descriptionsArray));
+
+    taskInput.value = '';
+    taskInput.placeholder = "Donner un titre à la tache";
+  }
+}
+var checkedTasks = [];
+
+function check(button) {
+  var firstInput = button.parentNode.parentNode.querySelector('#first');
+  var index = Array.from(button.closest('#Mes_taches').children).indexOf(button.closest('.elements'));
+
+  if (firstInput.style.textDecoration === 'line-through') {
+    firstInput.style.textDecoration = 'none';
+    firstInput.style.backgroundColor = "var(--color5)";
+    updateTaskState(index, false);
+  } else {
+    firstInput.style.textDecoration = 'line-through';
+    firstInput.style.backgroundColor = "#b35a62";
+    updateTaskState(index, true);
+  }
+}
+
+function updateTaskState(index, isCompleted) {
+  var storedTaskStates = localStorage.getItem('taskStates');
+  var taskStates = storedTaskStates ? JSON.parse(storedTaskStates) : [];
+
+  // Update or add the state for the current task
+  taskStates[index] = isCompleted;
+
+  // Save the updated task states to localStorage
+  localStorage.setItem('taskStates', JSON.stringify(taskStates));
+}
+
+// Charger les états des tâches lors du chargement de la page
+function loadTaskStates() {
+  var storedTaskStates = localStorage.getItem('taskStates');
+  var taskStates = storedTaskStates ? JSON.parse(storedTaskStates) : [];
+
+  var taskElements = document.querySelectorAll('#Mes_taches .elements');
+  taskElements.forEach(function (taskElement, index) {
+    var firstInput = taskElement.querySelector('#first');
+    if (taskStates[index]) {
+      firstInput.style.textDecoration = 'line-through';
+      firstInput.style.backgroundColor = "#b35a62";
+
+    }
+  });
+
+}
+
+
+
+function deleteTask(button) {
+  var taskDiv = button.parentNode.parentNode;
+  var index = Array.from(taskDiv.parentNode.children).indexOf(taskDiv);
+
+  taskDiv.remove();
+
+  var storedTasks = localStorage.getItem('tasks');
+  var storedDescriptions = localStorage.getItem('descriptions');
+  var tasksArray = storedTasks ? JSON.parse(storedTasks) : [];
+  var descriptionsArray = storedDescriptions ? JSON.parse(storedDescriptions) : [];
+
+  tasksArray.splice(index, 1);
+  descriptionsArray.splice(index, 1);
+
+  localStorage.setItem('tasks', JSON.stringify(tasksArray));
+  localStorage.setItem('descriptions', JSON.stringify(descriptionsArray));
+}
+
+function showchecktask() {
+  var taskElements = document.querySelectorAll('#Mes_taches .elements');
+
+  taskElements.forEach(function (taskElement) {
+    var firstInput = taskElement.querySelector('#first');
+
+    if (firstInput.style.textDecoration === 'line-through') {
+      taskElement.style.display = 'block';  // Afficher la tâche
+    } else {
+      taskElement.style.display = 'none';   // Masquer la tâche
+    }
+  });
+  var taskInput = document.querySelector('input[name="task"]');
+  var mainbtn = document.getElementById("mainbtn");
+  var searchdiv = document.querySelector(".search"); // Utiliser querySelector
+
+  taskInput.disabled  =true;
+  mainbtn.disabled  =true;  // Vérifier si l'élément avec la classe "search" existe avant de modifier sa propriété
+  if (searchdiv) {
+    searchdiv.style.display = "none";
+  }
+}
+
+
+function showalltask() {
+  var taskElements = document.querySelectorAll('#Mes_taches .elements');
+
+  taskElements.forEach(function (taskElement) {
+    taskElement.style.display = 'block';  // Afficher la tâche
+  });
+
+  var taskInput = document.querySelector('input[name="task"]');
+  var mainbtn = document.getElementById("mainbtn");
+  var searchDiv = document.querySelector(".search");
+
+  taskInput.disabled = false;
+  mainbtn.disabled = false;
+
+  // Afficher l'élément avec la classe "search"
+  if (searchDiv) {
+    searchDiv.style.display = "block";
+  }
+}
+
+
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    add();
+  }
+});
+
+function filterTasks() {
+  var searchInput = document.getElementById('search');
+  var filter = searchInput.value.toLowerCase();
+  var taskElements = document.querySelectorAll('#Mes_taches .elements');
+
+  taskElements.forEach(function (taskElement) {
+    var firstInput = taskElement.querySelector('#first');
+    var secondInput = taskElement.querySelector('#second');
+    var title = firstInput.value.toLowerCase();
+    var desc = secondInput.value.toLowerCase();
+
+    if (title.indexOf(filter)  > -1 || desc.indexOf(filter) > -1) {
+      taskElement.style.display = 'block';  // Afficher la tâche
+    } else {
+      taskElement.style.display = 'none';   // Masquer la tâche
+    }
+  });
+
+  
+}
+
+
